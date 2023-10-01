@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<h1>{{.PageTitle}}</h1>
+<h1>{{.PageTitle}} xsd</h1>
 <ul>
     {{range .Todos}}
         {{if .Done}}
@@ -17,7 +17,6 @@
 </ul>
 <script type="text/javascript">
     (function connect() {
-        var data = document.getElementById("fileData");
         var conn = new WebSocket("ws://{{.Host}}/ws");
         
         conn.onclose = function(event) {
