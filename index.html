@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>{{.PageTitle}}</h1>
+<ul>
+    {{range .Todos}}
+        {{if .Done}}
+            <li class="done">{{.Title}}</li>
+        {{else}}
+            <li>{{.Title}}</li>
+        {{end}}
+    {{end}}
+</ul>
+<script type="text/javascript">
+    (function connect() {
+        var data = document.getElementById("fileData");
+        var conn = new WebSocket("ws://{{.Host}}/ws");
+        
+        conn.onclose = function(event) {
+          console.log("Websocket connection closed or unable to connect; " +
+            "starting reconnect timeout");
+
+          // Allow the last socket to be cleaned up.
+          conn = null;
+
+          // Set an interval to continue trying to reconnect
+          // periodically until we succeed.
+          setTimeout(function() {
+            connect();
+          }, 5000)
+        }
+        conn.onmessage = function(evt) {
+            window.location.reload();
+        }
+    })();
+</script>
+</body>
+</html>
