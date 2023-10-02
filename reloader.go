@@ -104,6 +104,6 @@ func (r *Reloader) reload(name string) error {
 		return nil
 	}
 
-	return fmt.Errorf("Unable to reload file %s\n", name)
+	return fmt.Errorf("Unable to reload file %s", name)
 
 }

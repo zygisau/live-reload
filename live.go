@@ -113,17 +113,15 @@ func getServeHome(reloader *Reloader) http.HandlerFunc {
 func broadcastInterval() {
 	ticker := time.NewTicker(broadcastPeriod)
 	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			broadcastCond.Broadcast()
-		}
+	for range ticker.C {
+		broadcastCond.Broadcast()
 	}
 }
 
 func main() {
 	broadcastCond = sync.NewCond(&broadcastCondMu)
 	go broadcastInterval()
+
 	r := New("./")
 	r.templates = map[string]*template.Template{
 		"index": template.Must(template.ParseFiles("index.html")),
@@ -132,5 +130,7 @@ func main() {
 
 	http.Handle("/", getServeHome(r))
 	http.Handle("/ws", getServeWs())
+
+	fmt.Println("Listening to changes at ", *addr)
 	http.ListenAndServe(*addr, nil)
 }
